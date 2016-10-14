@@ -3,7 +3,7 @@ from datetime import date, timedelta
 
 class BudgetEvent(object):
 
-    def __init__(self, name, amount, kind, start_date, end_date = None, day_of_month = None):
+    def __init__(self, name, amount, kind, start_date = date.today(), end_date = None, day_of_month = None):
         self.name = name
         self.amount = amount
         self.kind = kind
