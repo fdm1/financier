@@ -8,6 +8,14 @@ budget_events:
     kind: monthly
     start_date: 2016-10-14
     day_of_month: 20
+  mortgage:
+    amount: -2
+    kind: bimonthly
+  vacation:
+    amount: -24.3
+    kind: one_time
+    start_date: 2016-11-02
+
 
 
     
