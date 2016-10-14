@@ -1,0 +1,13 @@
+budget_events:
+  frank_pay: 
+    amount: 10
+    kind: biweekly
+    start_date: 2016-10-14
+  daycare: 
+    amount: -4.5
+    kind: monthly
+    start_date: 2016-10-14
+    day_of_month: 20
+
+
+    
