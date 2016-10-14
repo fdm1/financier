@@ -1,11 +1,13 @@
 requires Docker installed to work
 
-`bash budgetize.sh <config_file> \
+```
+bash budgetize.sh <config_file> \
     [-s <start_date> (YYYY-MM-DD) (default today)] \
     [-e <end_date> (YYYY-MM-DD) (default 1 year from now)] \
     [-b <start_balance> (default 0)] \
     [-f <output_file> (default <config>_YYYYMMDD_HHSS.csv) ] \
-    [--no_csv=True (default False) ]`
+    [--no_csv=True (default False) ]
+```
 
 If `--no_csv`, it will print the budget to the screen.
 Else, it will create a csv in the same directory as the config.
@@ -21,6 +23,13 @@ budget_events:
     start_date: <date (YYYY-MM-DD) default: today>
     day_of_month: <day>
     end_date: <date (YYYY-MM-DD>
+  <event_name>:
+    amount: <amount>
+    kind: <kind: [one_time | bimonthly | biweekly | monthly]
+    start_date: <date (YYYY-MM-DD) default: today>
+    day_of_month: <day>
+    end_date: <date (YYYY-MM-DD>
+  (etc...as many events as you need)...
 ```
 
 ### `budget_event` kinds:
