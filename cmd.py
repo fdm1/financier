@@ -12,11 +12,14 @@ def main(params):
 
 
     if params.get('to_csv') == "True":
-        filepath = params.get('filename', params['config'].split('/')[-1].split('.')[0] + datetime.now().strftime('_%Y%m%d_%H%M') + '.csv')
-        budget_simulator.to_csv(filepath)
+        csv_path = params.get('filename')
+        if not csv_path:
+            csv_path =  params['config'].split('.')[0] + datetime.now().strftime('_%Y%m%d_%H%M') + '.csv'
+        budget_simulator.to_csv('/config/{}'.format(os.path.basename(csv_path)))
     else:
-        with pd.option_context('display.max_rows', 999, 'display.max_columns', 5):
-            print(budget_simulator.to_df())
+        df = budget_simulator.to_df()
+        with pd.option_context('display.max_rows', len(df), 'display.max_columns', len(df.columns)):
+            print(df)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate budget forecast')
