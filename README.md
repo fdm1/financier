@@ -1,7 +1,7 @@
 requires Docker installed to work
 
 ```
-bash budgetize.sh <config_file> \
+bash budgetize.sh <config_file_full_path> \
     [-s <start_date> (YYYY-MM-DD) (default today)] \
     [-e <end_date> (YYYY-MM-DD) (default 1 year from now)] \
     [-b <start_balance> (default 0)] \
