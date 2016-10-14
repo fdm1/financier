@@ -5,7 +5,6 @@ import os
 import argparse
 
 def main(params):
-    print(params)
 
     for d in ['start_date', 'end_date']:
         if isinstance(params[d], str):
