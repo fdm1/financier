@@ -12,7 +12,7 @@ class BudgetEvent(object):
         self.end_date = end_date
 
     def should_update(self, thedate):
-        if thedate < self.start_date or (self.end_date and thedate > self.end_date): return False
+        if (self.end_date and thedate > self.end_date): return False
         #TODO: deal with end of month
         if self.kind == 'monthly': return thedate.day == self.day_of_month
         if self.kind == 'biweekly': return (thedate - self.start_date).days % 14 == 0

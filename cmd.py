@@ -5,10 +5,15 @@ import os
 import argparse
 
 def main(params):
+    print(params)
+
+    for d in ['start_date', 'end_date']:
+        if isinstance(params[d], str):
+            params[d] = datetime.strptime(params[d], '%Y-%m-%d').date()
     budget_simulator = BudgetSimulator(config = params['config'],
                                         start_date = params.get('start_date'),
                                         end_date = params.get('end_date'),
-                                        start_balance = params.get('balance'))
+                                        start_balance = int(params.get('balance')))
 
 
     if params.get('to_csv') == "True":
