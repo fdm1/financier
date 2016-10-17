@@ -38,7 +38,11 @@ class BudgetSimulator(object):
         running_balance = self.start_balance
         line_break = LineBreak(sep = sep)
         empty_line = LineBreak(filler = '', sep = sep)
-        ledger = [LedgerEntry(self.start_date, "Starting Balance", None, self.start_balance, sep), line_break]
+        ledger = [LedgerEntry(self.start_date, "Starting Balance", None, None, self.start_balance, sep = sep), line_break]
+        min_balance = self.start_balance
+        total_min_balance = self.start_balance
+        max_balance = self.start_balance
+        total_max_balance = self.start_balance
         while thedate <= self.end_date:
             for e in budget_events:
                 event = e.update_balance(running_balance, thedate)
@@ -46,31 +50,45 @@ class BudgetSimulator(object):
                     le = LedgerEntry(*event)
                     ledger.append(le)
                     running_balance = le.balance
+                    if running_balance > total_max_balance:
+                        total_max_balance = running_balance
+                    if running_balance < total_min_balance:
+                        total_min_balance = running_balance
+                    if running_balance > max_balance:
+                        max_balance = running_balance
+                    if running_balance < min_balance:
+                        min_balance = running_balance
             if (thedate + timedelta(1)).day == 1:
                 ledger.append(LineBreak())
-                ledger.append(LedgerEntry(thedate, "End of Month", None, running_balance))
+                ledger.append(LedgerEntry(thedate, "End of Month", None, None, running_balance, min_balance, max_balance))
                 ledger.append(empty_line)
+                min_balance = running_balance
+                max_balance = running_balance
             thedate = thedate + timedelta(1)
         ledger.append(empty_line)
         ledger.append(line_break)
-        ledger.append(LedgerEntry(self.end_date, "Ending Balance", None, running_balance))
+        ledger.append(LedgerEntry(self.end_date, "Ending Balance", None, None, running_balance, total_min_balance, total_max_balance))
         return ledger
 
-    def __str__(self):
-        ledger = self.simulate_budget()
-        print("Date\tEvent\tAmount\tBalance")
-        for event in ledger:
-            print(event)
+    # def __str__(self):
+    #     ledger = self.simulate_budget()
+    #     print("Date\tEvent\tAmount\tBalance\tMin\tMax")
+    #     for event in ledger:
+    #         print(event)
 
-    def to_df(self):
+    def to_df(self, output=None):
         df = pd.DataFrame([str(l).split(',') for l in self.simulate_budget()])
-        df.columns = ["Date", "Event", "Amount", "Balance"]
+        df.columns = ["Date", "Event", "Debit", "Credit", "Balance","Min", "Max"]
+        if output == 'simple':
+            df = df[((df.Date != df.Event) | (df.Date != df.Balance)) & (df.Event.isin(['Starting Balance', 'End of Month', 'Ending Balance']) == False) ]
+        if output == 'summary':
+            df = df[df.Event.isin(['Starting Balance', 'End of Month', 'Ending Balance'])][[col for col in df.columns if col not in ['Debit', 'Credit']]]
         return df
 
-    def to_csv(self, filename):
-        df = self.to_df()
+    def to_csv(self, filename, output=None):
+        df = self.to_df(output)
         logging.info('Generating budget to {}'.format(filename))
-        df[(df.Date != df.Amount) | (df.Date != df.Event) | (df.Date != df.Balance)].to_csv(filename, index = False)
+        df.to_csv(filename, index = False)
 
 
 

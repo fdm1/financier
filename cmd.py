@@ -15,15 +15,17 @@ def main(params):
                                         start_balance = float(params.get('balance')))
 
 
-    if params.get('to_csv') == "True":
+    if params.get('to_csv') != 'False':
         csv_path = params.get('filename')
         if not csv_path:
             csv_path =  params['config'].split('.')[0] + datetime.now().strftime('_%Y%m%d_%H%M') + '.csv'
-        budget_simulator.to_csv('/config/{}'.format(os.path.basename(csv_path)))
+        budget_simulator.to_csv('/config/{}'.format(os.path.basename(csv_path)), params.get('output'))
     else:
-        df = budget_simulator.to_df()
-        with pd.option_context('display.max_rows', len(df), 'display.max_columns', len(df.columns)):
-            print(df)
+        df = budget_simulator.to_df(params.get('output'))
+        pd.set_option('display.max_columns', 500)
+        pd.set_option('display.width', 1000)
+        pd.set_option('display.max_rows', len(df))
+        print(df)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate budget forecast')
@@ -33,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--balance', '-b', default = 0, help = 'Starting balance (default 0)')
     parser.add_argument('--filename', '-f', help = 'filename to output csv to')
     parser.add_argument('--to_csv', default = 'True', help = "generate a csv")
+    parser.add_argument('--output', '-o', default = None, help = "output style (summary == only EOM, simple == no pretty print or summary")
     args = parser.parse_args()
 
     main(vars(args))
