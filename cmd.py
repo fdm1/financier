@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--end_date', '-e', default = date.today() + timedelta(365), help = 'End date (default 1 year from today)')
     parser.add_argument('--balance', '-b', default = 0, help = 'Starting balance (default 0)')
     parser.add_argument('--filename', '-f', help = 'filename to output csv to')
-    parser.add_argument('--to_csv', default = 'True', help = "generate a csv")
+    parser.add_argument('--to_csv', default = 'False', help = "generate a csv")
     parser.add_argument('--output', '-o', default = None, help = "output style (summary == only EOM, simple == no pretty print or summary")
     args = parser.parse_args()
 
