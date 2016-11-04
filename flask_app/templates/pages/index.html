@@ -1,0 +1,30 @@
+<!doctype html>
+<title>Simple Page Blueprint</title>
+<div class="page">
+  <div class="upload_form">
+    {% from 'macros/_upload_form.html' import upload_form %}
+    {{ upload_form() }}
+  </div>
+
+  <div class="budget_table">
+    {% from 'macros/_budget_table.html' import budget_table %}
+    {{ budget_table(budget) }}
+  </div>
+
+
+  {# <h1>This is blueprint example</h1> #}
+  {# <p> #}
+  {#   A simple page blueprint is registered under / and /pages #}
+  {#   you can access it using this URLs: #}
+  {# <ul> #}
+  {#   <li><a href="{{ url_for('financier_app.show', page='hello') }}">/hello</a> #}
+  {#   <li><a href="{{ url_for('financier_app.show', page='world') }}">/world</a> #}
+  {# </ul> #}
+  {# <p> #}
+  {#   Also you can register the same blueprint under another path #}
+  {# <ul> #}
+  {#   <li><a href="/pages/hello">/pages/hello</a> #}
+  {#   <li><a href="/pages/world">/pages/world</a> #}
+  {# </ul> #}
+  {#  #}
+</div>

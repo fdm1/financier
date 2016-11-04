@@ -3,6 +3,7 @@ from datetime import date, timedelta
 
 class BudgetEvent(object):
 
+
     def __init__(self, name, amount, kind, start_date = None, example_date = date.today(), exact_date = date.today(), end_date = None, day_of_month = None):
         self.name = name
         if amount >= 0:
@@ -17,6 +18,10 @@ class BudgetEvent(object):
         self.example_date = example_date
         self.exact_date = exact_date
         self.end_date = end_date
+
+    @property
+    def debit(self):
+        return self.debit_amount > 0 and self.credit_amount == 0
 
     def should_update(self, thedate):
         if self.kind == 'one_time': return thedate == self.exact_date
