@@ -3,7 +3,7 @@ from financier.ledger_entry import LedgerEntry
 from financier.yaml_loader import no_duplicates_constructor
 from datetime import date, timedelta
 import yaml
-import pandas as pd
+# import pandas as pd
 import logging
 
 
@@ -80,21 +80,15 @@ class BudgetSimulator(object):
                 min_balance = running_balance
                 max_balance = running_balance
             thedate = thedate + timedelta(1)
-        ledger.append(LedgerEntry(thedate=self.end_date,
+        event = LedgerEntry(thedate=self.end_date,
                                     event="Ending Balance", 
                                     debit_amount=None,
                                     credit_amount=None,
                                     balance=running_balance, 
                                     min_balance=total_min_balance, 
-                                    max_balance=total_max_balance))
+                                    max_balance=total_max_balance)
+        ledger.append(event)
         return ledger
-
-    # def __str__(self):
-    #     ledger = self.simulate_budget()
-    #     print("Date\tEvent\tAmount\tBalance\tMin\tMax")
-    #     for event in ledger:
-    #         print(event)
-
 
     def budget(self, output=None):
         budget = [LedgerEntry("Date", "Event", "Debit", "Credit",

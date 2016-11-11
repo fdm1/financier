@@ -1,29 +1,29 @@
 {% macro budget_table(budget) %}
-<table>
-  {%- for row in budget %}
-    {%- if row.event in ['Starting Balance', 'End of Month', 'Ending Balance'] %}
+  <table>
+    {%- for row in budget %}
+      {%- if row.event in ['Starting Balance', 'End of Month', 'Ending Balance'] %}
+        <tr>
+          {%- for l in row %}
+            <td> ---- </td>
+          {%- endfor %}
+        </tr>
+        {%- endif %}
       <tr>
-        {%- for l in row %}
-          <td> ---- </td>
-        {%- endfor %}
+          <td>{{ row.thedate }}</td>
+          <td>{{ row.event }}</td>
+          <td>{{ row.debit_amount_currency }}</td>
+          <td>{{ row.credit_amount_currency }}</td>
+          <td>{{ row.balance_currency }}</td>
+          <td>{{ row.min_balance_currency }}</td>
+          <td>{{ row.max_balance_currency }}</td>
       </tr>
-      {%- endif %}
-    <tr>
-        <td>{{ row.thedate }}</td>
-        <td>{{ row.event }}</td>
-        <td>{{ row.debit_amount_currency }}</td>
-        <td>{{ row.credit_amount_currency }}</td>
-        <td>{{ row.balance_currency }}</td>
-        <td>{{ row.min_balance_currency }}</td>
-        <td>{{ row.max_balance_currency }}</td>
-    </tr>
-    {%- if row.event in ['End of Month'] %}
-      <tr>
-        {%- for l in row %}
-          <td> </td>
-        {%- endfor %}
-      </tr>
-      {%- endif %}
-    {%- endfor %}
-</table>
+      {%- if row.event in ['End of Month'] %}
+        <tr>
+          {%- for l in row %}
+            <td> </td>
+          {%- endfor %}
+        </tr>
+        {%- endif %}
+      {%- endfor %}
+  </table>
 {% endmacro %}

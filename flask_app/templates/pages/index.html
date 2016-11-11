@@ -6,6 +6,11 @@
     {{ upload_form() }}
   </div>
 
+  <div class="saved_files">
+    {% from 'macros/_saved_files.html' import load_saved_files %}
+    {{ load_saved_files(saved_files) }}
+  </div>
+
   <div class="budget_table">
     {% from 'macros/_budget_table.html' import budget_table %}
     {{ budget_table(budget) }}

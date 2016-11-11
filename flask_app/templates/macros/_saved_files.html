@@ -1,0 +1,12 @@
+{% macro load_saved_files(files) %}
+  <h1>Saved budgets</h1>
+  {% for f in files %}
+    <form action="load" method=post enctype=multipart/form-data>
+        <p>
+          {{ f['filename'] }} (last modified at {{ f['last_modified_at'] }})
+          <input hidden=true type=text value="{{ f['full_filename'] }}" name=file>
+          <input type=submit value=Load data="{{ f['full_filename'] }}">
+    </form>
+  {% endfor %}
+{% endmacro %}
+
