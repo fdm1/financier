@@ -16,10 +16,12 @@ class LedgerEntry(object):
     def _to_currency(self, amount):
         try:
             if amount == 0:
-                return ''
-            if isinstance(amount, str):
-                return amount
-            return locale.currency(amount)
+                res = ''
+            else:
+                res = amount
+            if isinstance(res, str):
+                return res
+            return locale.currency(res)
         except:
             return ''
 
