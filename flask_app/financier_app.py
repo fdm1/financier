@@ -42,7 +42,7 @@ def hello_world():
     create_folders()
     # try:
     budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
-                                        start_balance = 7172)
+                                        start_balance = 26042)
     budget = budget_simulator.budget()
     return render_template('pages/index.html',
                             budget=[i for i in budget],
@@ -56,7 +56,7 @@ def allowed_file(filename):
 
 def transfer_saved_file_to_working_path(filename):
     with open(os.path.join(STORAGE_DIRECTORY, filename), 'r') as saved_file:
-        with open(WORKING_FILEPATH), 'w') as f:
+        with open(WORKING_FILEPATH, 'w') as f:
             f.write(saved_file.read())
 
 
@@ -76,7 +76,7 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(STORAGE_DIRECTORY, filename)
+            file.save(os.path.join(STORAGE_DIRECTORY, filename))
             transfer_saved_file_to_working_path(filename)
             return redirect('/')
 
