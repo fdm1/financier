@@ -1,0 +1,13 @@
+version: '2'
+services:
+  master:
+    image: fdm1/base_python_dev:python3
+    command: bash -c "cd /financier; pip3 install -r requirements.txt; python3 app.py"
+    env_file: .env
+    working_dir: /financier
+    ports:
+      - 5000:5000
+    volumes:
+      - ./working_dir:/tmp/financier_working_dir
+      - .:/financier
+

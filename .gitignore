@@ -1,5 +1,7 @@
 tmp/
 reqs/
+working_dir/*.yaml
+.env
 *.pyc
 *.csv
 __pycache__/

@@ -42,7 +42,7 @@ def hello_world():
     create_folders()
     # try:
     budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
-                                        start_balance = 26042)
+                                        start_balance = int(os.getenv('START_BALANCE')))
     budget = budget_simulator.budget()
     return render_template('pages/index.html',
                             budget=[i for i in budget],
