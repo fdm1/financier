@@ -1,4 +1,5 @@
 {% macro budget_table(budget) %}
+<h4>Budget</h4>
   <table>
     {%- for row in budget %}
       {%- if row.event in ['Starting Balance', 'End of Month', 'Ending Balance'] %}

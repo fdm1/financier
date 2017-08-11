@@ -44,8 +44,10 @@ def hello_world():
     budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
                                         start_balance = int(os.getenv('START_BALANCE')))
     budget = budget_simulator.budget()
+    notes = budget_simulator.notes()
     return render_template('pages/index.html',
                             budget=[i for i in budget],
+                            notes=notes,
                             saved_files = get_saved_files())
     # except:
     #     return abort(404)

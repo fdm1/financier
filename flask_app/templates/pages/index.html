@@ -1,14 +1,19 @@
 <!doctype html>
 <title>Simple Page Blueprint</title>
 <div class="page">
-  <div class="upload_form">
-    {% from 'macros/_upload_form.html' import upload_form %}
-    {{ upload_form() }}
-  </div>
+  <!-- <div class="upload_form"> -->
+  <!--   {% from 'macros/_upload_form.html' import upload_form %} -->
+  <!--   {{ upload_form() }} -->
+  <!-- </div> -->
+  <!--  -->
+  <!-- <div class="saved_files"> -->
+  <!--   {% from 'macros/_saved_files.html' import load_saved_files %} -->
+  <!--   {{ load_saved_files(saved_files) }} -->
+  <!-- </div> -->
 
-  <div class="saved_files">
-    {% from 'macros/_saved_files.html' import load_saved_files %}
-    {{ load_saved_files(saved_files) }}
+  <div class="notes">
+    {% from 'macros/_notes.html' import budget_notes %}
+    {{ budget_notes(notes) }}
   </div>
 
   <div class="budget_table">

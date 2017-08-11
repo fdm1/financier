@@ -2,6 +2,7 @@ from financier.budget_event import BudgetEvent
 from financier.ledger_entry import LedgerEntry
 from financier.yaml_loader import no_duplicates_constructor
 from datetime import date, timedelta
+import os
 import yaml
 # import pandas as pd
 import logging
@@ -16,7 +17,8 @@ class BudgetSimulator(object):
         self.start_balance = start_balance
         self.start_date = start_date
         self.end_date = end_date
-        self.config = config
+        self.config_file = config
+        self.config = yaml.load(open(config, 'r'))
 
     def __repr__(self):
         return "{}(start_date={}, start_balance={}, end_date={}, config={})".format(
@@ -24,17 +26,29 @@ class BudgetSimulator(object):
                 self.start_date,
                 self.start_balance,
                 self.end_date,
-                self.config)
+                self.config_file)
 
 
     def build_budget_events(self):
         budget_events = []
         yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
                                 no_duplicates_constructor)
-        config = yaml.load(open(self.config, 'r'))
-        for e in config["budget_events"]:
-            budget_events.append(BudgetEvent(name = e, **config["budget_events"][e]))
+        for e in self.config["budget_events"]:
+            budget_events.append(BudgetEvent(name = e, **self.config["budget_events"][e]))
         return budget_events
+
+    def notes(self):
+        notes = [
+                'Start Date: {}'.format(date.today()),
+                'Start Balance: {}'.format(os.getenv('START_BALANCE')),
+                ]
+
+        if 'notes' in self.config:
+            for note in self.config['notes']:
+                notes.append(note)
+
+        return notes
+
 
     @property
     def budget_events(self):

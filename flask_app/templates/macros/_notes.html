@@ -1,0 +1,10 @@
+{% macro budget_notes(notes) %}
+
+  <h4>Notes</h4>
+
+  <table>
+    {%- for note in notes %}
+    <tr><td>- {{ note }}</td></tr>
+    {%- endfor %}
+  </table>
+{% endmacro %}
