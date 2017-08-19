@@ -38,17 +38,21 @@ def get_saved_files():
 
 
 @financier_app.route('/')
-def hello_world():
+def show_budget():
     create_folders()
     # try:
-    budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
-                                        start_balance = int(os.getenv('START_BALANCE')))
-    budget = budget_simulator.budget()
-    notes = budget_simulator.notes()
+    start_balance = float(os.getenv('START_BALANCE'))
+    if os.path.isfile(WORKING_FILEPATH):
+        budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
+                                           start_balance=start_balance)
+        budget = budget_simulator.budget()
+        notes = budget_simulator.notes()
+    else:
+        budget = []
+        notes = ['No Budget Supplied. Please upload one']
     return render_template('pages/index.html',
                             budget=[i for i in budget],
-                            notes=notes,
-                            saved_files = get_saved_files())
+                            notes=notes)
     # except:
     #     return abort(404)
 
@@ -86,28 +90,13 @@ def upload_file():
 def load_file():
     create_folders()
     if request.method == 'POST':
-        # print(dir(request))
         file = request.values['file'].split('/')[-1]
         if file and allowed_file(file):
             transfer_saved_file_to_working_path(file)
             return redirect('/')
-    # return '''
-    # <!doctype html>
-    # <title>Upload new File</title>
-    # <h1>Upload new File</h1>
-    # <form action="" method=post enctype=multipart/form-data>
-    #   <p><input type=file name=file>
-    #      <input type=submit value=Upload>
-    # </form>
-    # '''
-#
-# @app.route('/events')
-# def get_routes():
-#     try:
-#         budget_simulator = BudgetSimulator(config='{}/budget.yaml'.format(UPLOAD_FOLDER),
-#                                             start_balance = 6000)
-#     except:
-#         os.mkdir(UPLOAD_FOLDER)
-#         return redirect('/upload')
-#     return str(budget_simulator.budget_events)
-#
+
+@financier_app.route('/set_start_balance', methods=['POST'])
+def set_start_balance():
+    if request.method == 'POST':
+        os.environ['START_BALANCE'] = str(request.values['start_balance'])
+        return redirect('/')
