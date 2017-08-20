@@ -4,13 +4,12 @@ from financier.yaml_loader import no_duplicates_constructor
 from datetime import date, timedelta
 import os
 import yaml
-# import pandas as pd
 import logging
 
 
 class BudgetSimulator(object):
 
-    def __init__(self, config, start_balance = 0,
+    def __init__(self, config, start_balance = os.getenv('START_BALANCE', 0),
                         end_date = date.today() + timedelta(365),
                         start_date = date.today()):
 
@@ -40,7 +39,7 @@ class BudgetSimulator(object):
     def notes(self):
         notes = [
                 'Start Date: {}'.format(date.today()),
-                'Start Balance: {}'.format(os.getenv('START_BALANCE')),
+                'Start Balance: {}'.format(os.getenv('START_BALANCE', 0)),
                 ]
 
         if 'notes' in self.config:
@@ -123,7 +122,10 @@ class BudgetSimulator(object):
                                     'Ending Balance')]
         return budget
 
+
     def to_csv(self, filename, output=None):
-        df = self.to_df(output)
         logging.info('Generating budget to {}'.format(filename))
-        df.to_csv(filename, index = False)
+        with open(filename, 'w') as csvfile:
+            for row in self.budget():
+                csvfile.write(row.csv_string + "\n")
+        return filename

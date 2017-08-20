@@ -16,6 +16,11 @@
     {{ budget_notes(notes) }}
   </div>
 
+  <div class="budget_graph">
+    {% from 'macros/_budget_graph.html' import budget_graph %}
+    {{ budget_graph(json_data) }}
+  </div>
+
   <div class="budget_table">
     {% from 'macros/_budget_table.html' import budget_table %}
     {{ budget_table(budget) }}

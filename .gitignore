@@ -1,6 +1,7 @@
 tmp/
 reqs/
 working_dir/*.yaml
+static/data
 .env
 *.pyc
 *.csv

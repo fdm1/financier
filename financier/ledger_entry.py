@@ -55,6 +55,17 @@ class LedgerEntry(object):
                self.max_balance_currency ]:
             yield i
 
+
+    @property
+    def csv_string(self):
+        data = [str(self.thedate).lower(),
+                # str(self.event).lower(),
+                str(self.balance).lower()
+               ]
+        return ','.join(data)
+
+
+
     def __str__(self):
         return self.sep.join(list(self))
 

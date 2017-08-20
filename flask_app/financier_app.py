@@ -41,17 +41,20 @@ def get_saved_files():
 def show_budget():
     create_folders()
     # try:
-    start_balance = float(os.getenv('START_BALANCE'))
+    start_balance = float(os.getenv('START_BALANCE', 0))
     if os.path.isfile(WORKING_FILEPATH):
         budget_simulator = BudgetSimulator(config=WORKING_FILEPATH,
                                            start_balance=start_balance)
         budget = budget_simulator.budget()
         notes = budget_simulator.notes()
+        csv_data = budget_simulator.to_csv('static/data/budget.csv')
     else:
         budget = []
         notes = ['No Budget Supplied. Please upload one']
+        csv_data=""
     return render_template('pages/index.html',
                             budget=[i for i in budget],
+                            csv_data=csv_data,
                             notes=notes)
     # except:
     #     return abort(404)
@@ -98,5 +101,5 @@ def load_file():
 @financier_app.route('/set_start_balance', methods=['POST'])
 def set_start_balance():
     if request.method == 'POST':
-        os.environ['START_BALANCE'] = str(request.values['start_balance'])
+        os.environ['START_BALANCE'] = str(request.values['start_balance']) or 0
         return redirect('/')
