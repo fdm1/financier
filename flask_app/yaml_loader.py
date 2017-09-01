@@ -1,5 +1,4 @@
 from yaml.constructor import ConstructorError
-from yaml import CLoader as Loader
 from string import digits
 def no_duplicates_constructor(loader, node, deep=False):
     """Check for duplicate keys."""

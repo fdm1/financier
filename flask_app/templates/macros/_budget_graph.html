@@ -1,4 +1,4 @@
-{% macro budget_graph(csv_data) %}
+{% macro budget_graph(json_data) %}
   <budget_graph></budget_graph>
   <style type="text/css">
   /* 13. Basic Styling with CSS */
@@ -48,40 +48,34 @@
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
-    // Get the data
-    var data_file = "{{url_for('static', filename='data/budget.csv')}}"
-    var randomizer = Math.floor(Math.random() * 1000)
-    d3.csv(data_file + '?' + randomizer, function(error, data) {
-      if (error) throw error;
+    var json_data = JSON.parse({{json_data|tojson}});
 
-      // format the data
-      data.forEach(function(d) {
-          d.date = parseTime(d.date);
-          d.balance = +d.balance;
-      });
-
-      // Scale the range of the data
-      x.domain(d3.extent(data, function(d) { return d.date; }));
-      var data_min = d3.min(data, function(d) { return d.balance; })
-      y.domain([(data_min > 0 ? 0 : data_min),
-                d3.max(data, function(d) { return d.balance; })]);
-
-      // Add the valueline path.
-      svg.append("path")
-          .data([data])
-          .attr("class", "line")
-          .attr("d", valueline);
-
-      // Add the X Axis
-      svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x));
-
-      // Add the Y Axis
-      svg.append("g")
-          .call(d3.axisLeft(y));
-
+    // format the data
+    json_data.forEach(function(d) {
+        d.date = parseTime(d.date);
+        d.balance = +d.balance;
     });
 
+    // Scale the range of the data
+    x.domain(d3.extent(json_data, function(d) { return d.date; }));
+    var data_min = d3.min(json_data, function(d) { return d.balance; })
+    y.domain([(data_min > 0 ? 0 : data_min),
+              d3.max(json_data, function(d) { return d.balance; })]);
+
+    // Add the valueline path.
+    svg.append("path")
+        .data([json_data])
+        .attr("class", "line")
+        .attr("d", valueline);
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // Add the Y Axis
+    svg.append("g")
+        .call(d3.axisLeft(y));
   </script>
+
 {% endmacro %}

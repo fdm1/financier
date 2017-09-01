@@ -1,7 +1,3 @@
-import locale
-
-locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
-
 class LedgerEntry(object):
     def __init__(self, thedate, event, debit_amount=None, credit_amount=None, balance=None, min_balance = None, max_balance = None, sep = ','):
         self.thedate = thedate
@@ -14,14 +10,12 @@ class LedgerEntry(object):
         self.sep = sep
 
     def _to_currency(self, amount):
+        if isinstance(amount, str):
+            return amount
+
+        res = amount if amount != 0 else None
         try:
-            if amount == 0:
-                res = ''
-            else:
-                res = amount
-            if isinstance(res, str):
-                return res
-            return locale.currency(res)
+            return ("$%.2f" % round(res, 2)).replace('-','')
         except:
             return ''
 
@@ -59,23 +53,15 @@ class LedgerEntry(object):
     @property
     def csv_string(self):
         data = [str(self.thedate).lower(),
-                # str(self.event).lower(),
                 str(self.balance).lower()
                ]
         return ','.join(data)
 
+    @property
+    def to_json(self):
+        return {'date': str(self.thedate), 'balance': str(self.balance)}
 
 
     def __str__(self):
         return self.sep.join(list(self))
 
-# class LineBreak(LedgerEntry):
-#     def __init__(self, filler = '----', sep = ',', **kwargs):
-#         self.thedate =          kwargs.get('thedate') or filler
-#         self.event =            kwargs.get('event') or filler
-#         self.debit_amount =     kwargs.get('debit_amount') or filler
-#         self.credit_amount =    kwargs.get('credit_amount') or filler
-#         self.balance =          kwargs.get('balance') or filler
-#         self.min_balance =      kwargs.get('min_balance') or filler
-#         self.max_balance =      kwargs.get('max_balance') or filler
-#         self.sep = sep

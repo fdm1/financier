@@ -1,49 +1,42 @@
 from financier.budget_event import BudgetEvent
 from financier.ledger_entry import LedgerEntry
-from financier.yaml_loader import no_duplicates_constructor
 from datetime import date, timedelta
-import os
+import json
 import yaml
-import logging
 
 
 class BudgetSimulator(object):
 
-    def __init__(self, config, start_balance = os.getenv('START_BALANCE', 0),
-                        end_date = date.today() + timedelta(365),
-                        start_date = date.today()):
+    def __init__(self, budget_dict, start_balance=0, end_date=date.today() + timedelta(365),
+                 start_date=date.today()):
 
         self.start_balance = start_balance
         self.start_date = start_date
         self.end_date = end_date
-        self.config_file = config
-        self.config = yaml.load(open(config, 'r'))
+        self.budget_dict = budget_dict
 
     def __repr__(self):
-        return "{}(start_date={}, start_balance={}, end_date={}, config={})".format(
+        return "{}(start_date={}, start_balance={}, end_date={})".format(
                 self.__class__.__name__,
                 self.start_date,
                 self.start_balance,
-                self.end_date,
-                self.config_file)
+                self.end_date)
 
 
     def build_budget_events(self):
         budget_events = []
-        yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-                                no_duplicates_constructor)
-        for e in self.config["budget_events"]:
-            budget_events.append(BudgetEvent(name = e, **self.config["budget_events"][e]))
+        for e in self.budget_dict["budget_events"]:
+            budget_events.append(BudgetEvent(name = e, **self.budget_dict["budget_events"][e]))
         return budget_events
 
     def notes(self):
         notes = [
                 'Start Date: {}'.format(date.today()),
-                'Start Balance: {}'.format(os.getenv('START_BALANCE', 0)),
+                'Start Balance: {}'.format(self.start_balance),
                 ]
 
-        if 'notes' in self.config:
-            for note in self.config['notes']:
+        if 'notes' in self.budget_dict:
+            for note in self.budget_dict['notes']:
                 notes.append(note)
 
         return notes
@@ -123,9 +116,5 @@ class BudgetSimulator(object):
         return budget
 
 
-    def to_csv(self, filename, output=None):
-        logging.info('Generating budget to {}'.format(filename))
-        with open(filename, 'w') as csvfile:
-            for row in self.budget():
-                csvfile.write(row.csv_string + "\n")
-        return filename
+    def to_json(self):
+        return json.dumps([r.to_json for r in self.budget()][1:])
