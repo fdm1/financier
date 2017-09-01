@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.register_blueprint(financier_app)
 # Blueprint can be registered many times
 app.register_blueprint(financier_app, url_prefix='/pages')
+
 Session(app)
 
 

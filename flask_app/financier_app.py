@@ -5,14 +5,13 @@ from flask_app.yaml_loader import no_duplicates_constructor
 from flask import flash, Blueprint, request, make_response, redirect, url_for, render_template, abort
 from werkzeug.utils import secure_filename
 from jinja2 import TemplateNotFound
+from string import digits
 import yaml
 
 
 financier_app = Blueprint('financier_app', __name__, template_folder='templates')
 yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
                      no_duplicates_constructor)
-
-ALLOWED_EXTENSIONS = set(['yaml'])
 
 # todo
 # - change modes (summary vs pretty)
@@ -22,10 +21,21 @@ ALLOWED_EXTENSIONS = set(['yaml'])
 # - save/load config
 
 
+def extract_float(value):
+    new_val = str(value or 0)
+    try:
+        return float(''.join([d for d in new_val if d in digits or d == '.']))
+    except:
+        return 0
+
+
+def float_to_currency(value):
+    return "$%.2f" % extract_float(str(value))
+
 
 @financier_app.route('/')
 def show_budget():
-    start_balance = float(request.cookies.get('start_balance') or 0)
+    start_balance = extract_float(request.cookies.get('start_balance') )
     current_budget = request.cookies.get('current_budget')
     if current_budget and isinstance(eval(current_budget), dict):
         budget_simulator = BudgetSimulator(eval(current_budget),
@@ -38,13 +48,10 @@ def show_budget():
         notes = ['No Budget Supplied. Please upload one']
         json_data=""
     return render_template('pages/index.html',
-                            budget=[i for i in budget],
-                            json_data=json_data,
-                            notes=notes)
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+                           budget=[i for i in budget],
+                           json_data=json_data,
+                           notes=notes,
+                           start_balance=float_to_currency(start_balance))
 
 
 @financier_app.route('/upload', methods=['POST'])
@@ -60,12 +67,19 @@ def upload_file():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file:
+            resp = make_response(redirect('/'))
             filename = secure_filename(file.filename)
             tmp_path = os.path.join('/tmp', filename)
             file.save(tmp_path)
-            resp = make_response(redirect('/'))
-            resp.set_cookie('current_budget', str(yaml.load(open(tmp_path, 'r'))))
+            try:
+                budget = str(yaml.load(open(tmp_path, 'r')))
+            except:
+                # flash("{} is not valid yaml".format(filename))
+                os.remove(tmp_path)
+                return resp
+
+            resp.set_cookie('current_budget', budget)
             os.remove(tmp_path)
             return resp
 
@@ -73,5 +87,5 @@ def upload_file():
 @financier_app.route('/set_start_balance', methods=['POST'])
 def set_start_balance():
     resp = make_response(redirect('/'))
-    resp.set_cookie('start_balance', str(request.values['start_balance']) or 0)
+    resp.set_cookie('start_balance', request.values['start_balance'] or 0)
     return resp

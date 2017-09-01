@@ -32,7 +32,7 @@ class BudgetSimulator(object):
     def notes(self):
         notes = [
                 'Start Date: {}'.format(date.today()),
-                'Start Balance: {}'.format(self.start_balance),
+                'Start Balance: {}'.format("$%.2f" % self.start_balance),
                 ]
 
         if 'notes' in self.budget_dict:

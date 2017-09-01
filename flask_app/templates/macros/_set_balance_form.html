@@ -1,6 +1,8 @@
-{% macro set_balance_form() %}
+{% macro set_balance_form(start_balance) %}
   <form action="set_start_balance" method=post enctype=multipart/form-data>
-    <p><input type=string name=start_balance>
-       <input type=submit value="Set Starting Balance">
+    <p>
+      <input type=string name=start_balance placeholder={{start_balance}}>
+      <input type=submit value="Update Starting Balance">
+    </p>
   </form>
 {% endmacro %}
