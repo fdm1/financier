@@ -15,6 +15,7 @@ class BudgetSimulator(object):
         self.end_date = end_date
         self.budget_dict = budget_dict
 
+
     def __repr__(self):
         return "{}(start_date={}, start_balance={}, end_date={})".format(
                 self.__class__.__name__,
@@ -27,7 +28,27 @@ class BudgetSimulator(object):
         budget_events = []
         for e in self.budget_dict["budget_events"]:
             budget_events.append(BudgetEvent(name = e, **self.budget_dict["budget_events"][e]))
+
         return budget_events
+
+
+    def ordered_events(self):
+        """Return non-one-time events in order of date,
+        followed by one-time events ordered by date.
+
+        Used for `edit_budget` view"""
+
+        ordered_events = []
+        today = datetime.today
+        if today.day == 1:
+            start_month = today.month
+        else:
+            start_month = today.month + 1
+
+        start_date = datetime(today.year, start_month, today.day)
+
+        pass
+
 
     def notes(self):
         notes = [
@@ -46,9 +67,10 @@ class BudgetSimulator(object):
     def budget_events(self):
         return self.build_budget_events()
 
+
     def simulate_budget(self, sep = ','):
         thedate = self.start_date
-        running_balance = self.start_balance
+        balance = self.start_balance
         ledger = [LedgerEntry(thedate=self.start_date,
                                 debit_amount=None,
                                 credit_amount=None,
@@ -61,40 +83,43 @@ class BudgetSimulator(object):
         total_max_balance = self.start_balance
         while thedate <= self.end_date:
             for e in self.budget_events:
-                event = e.update_balance(running_balance, thedate)
-                if event:
-                    le = LedgerEntry(*event)
+                event, thedate, new_balance = e.update_balance(balance, thedate)
+                if new_balance:
+                    balance = new_balance
+                    le = LedgerEntry(event,
+                                     thedate=thedate,
+                                     balance=balance)
                     ledger.append(le)
-                    running_balance = le.balance
-                    if running_balance > total_max_balance:
-                        total_max_balance = running_balance
-                    if running_balance < total_min_balance:
-                        total_min_balance = running_balance
-                    if running_balance > max_balance:
-                        max_balance = running_balance
-                    if running_balance < min_balance:
-                        min_balance = running_balance
+                    if balance > total_max_balance:
+                        total_max_balance = balance
+                    if balance < total_min_balance:
+                        total_min_balance = balance
+                    if balance > max_balance:
+                        max_balance = balance
+                    if balance < min_balance:
+                        min_balance = balance
             if (thedate + timedelta(1)).day == 1:
                 ledger.append(
                     LedgerEntry(thedate=thedate,
                                 event="End of Month",
                                 debit_amount=None,
                                 credit_amount=None,
-                                balance=running_balance,
+                                balance=balance,
                                 min_balance=min_balance,
                                 max_balance=max_balance))
-                min_balance = running_balance
-                max_balance = running_balance
+                min_balance = balance
+                max_balance = balance
             thedate = thedate + timedelta(1)
         event = LedgerEntry(thedate=self.end_date,
                                     event="Ending Balance", 
                                     debit_amount=None,
                                     credit_amount=None,
-                                    balance=running_balance, 
+                                    balance=balance, 
                                     min_balance=total_min_balance, 
                                     max_balance=total_max_balance)
         ledger.append(event)
         return ledger
+
 
     def budget(self, output=None):
         budget = [LedgerEntry("Date", "Event", "Debit", "Credit",

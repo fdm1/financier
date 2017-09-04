@@ -1,9 +1,15 @@
 class LedgerEntry(object):
-    def __init__(self, thedate, event, debit_amount=None, credit_amount=None, balance=None, min_balance = None, max_balance = None, sep = ','):
+    def __init__(self, event, debit_amount=None, credit_amount=None, thedate=None, balance=None, min_balance = None, max_balance = None, sep = ','):
         self.thedate = thedate
-        self.event = event
-        self.debit_amount = debit_amount
-        self.credit_amount = credit_amount
+        if isinstance(event, str):
+            self.debit_amount = debit_amount
+            self.credit_amount = credit_amount
+            self.event = event
+        else:
+            self.event = event.name
+            self.debit_amount = event.debit_amount
+            self.credit_amount = event.credit_amount
+
         self.balance = balance
         self.min_balance = min_balance
         self.max_balance = max_balance
