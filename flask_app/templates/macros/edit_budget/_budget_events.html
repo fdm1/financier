@@ -1,0 +1,17 @@
+{% macro budget_events(events) %}
+  <table>
+    <th>Event</th>
+    <th>Kind</th>
+    <th>Amount</th>
+    <th>Details</th>
+
+
+    {%- for event in events %}
+      <tr>
+        <td>{{event.name}}</td>
+        <td>{{event.kind}}</td>
+        <td>{{"$%.2f" % (event.debit_amount or event.credit_amount)}}</td>
+      </tr>
+      {%- endfor %}
+  </table>
+{% endmacro %}

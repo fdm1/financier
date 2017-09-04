@@ -33,16 +33,25 @@ def float_to_currency(value):
     return "$%.2f" % extract_float(str(value))
 
 
-@financier_app.route('/')
-def show_budget():
-    start_balance = extract_float(request.cookies.get('start_balance') )
+def start_balance(request):
+    return extract_float(request.cookies.get('start_balance'))
+
+def build_budget(request):
     current_budget = request.cookies.get('current_budget')
     if current_budget and isinstance(eval(current_budget), dict):
-        budget_simulator = BudgetSimulator(eval(current_budget),
-                                           start_balance=start_balance)
-        budget = budget_simulator.budget()
-        notes = budget_simulator.notes()
-        json_data = budget_simulator.to_json()
+        return BudgetSimulator(eval(current_budget),
+                               start_balance=start_balance(request))
+    else:
+        return None
+
+
+@financier_app.route('/')
+def show_budget_simulation():
+    simulated_budget = build_budget(request)
+    if simulated_budget:
+        budget = simulated_budget.budget()
+        notes = simulated_budget.notes()
+        json_data = simulated_budget.to_json()
     else:
         budget = []
         notes = ['No Budget Supplied. Please upload one']
@@ -51,7 +60,7 @@ def show_budget():
                            budget=[i for i in budget],
                            json_data=json_data,
                            notes=notes,
-                           start_balance=float_to_currency(start_balance))
+                           start_balance=float_to_currency(start_balance(request)))
 
 
 @financier_app.route('/upload', methods=['POST'])
@@ -89,3 +98,11 @@ def set_start_balance():
     resp = make_response(redirect('/'))
     resp.set_cookie('start_balance', request.values['start_balance'] or 0)
     return resp
+
+
+@financier_app.route('/edit_budget')
+def edit_budget():
+    simulated_budget = build_budget(request)
+    return render_template('pages/edit_budget.html',
+                           events=simulated_budget.budget_events)
+
