@@ -1,6 +1,6 @@
 import os
 import datetime
-from financier import BudgetSimulator
+from financier.budget_simulator import BudgetSimulator
 from flask_app.yaml_loader import no_duplicates_constructor
 from flask import flash, Blueprint, request, make_response, redirect, url_for, render_template, abort
 from werkzeug.utils import secure_filename
