@@ -2,7 +2,7 @@
 ignore=__init__.py
 
 [MESSAGES CONTROL]
-disable=wrong-import-order,locally-disabled,no-member,import-error,too-few-public-methods
+disable=wrong-import-order,locally-disabled,no-member,import-error,too-few-public-methods,fixme
 
 [DESIGN]
 max-args=8
@@ -25,3 +25,7 @@ argument-rgx=[a-z_][a-z0-9_]{1,30}$
 const-rgx=[A-z_][A-z0-9_]{1,30}$
 module-rgx=[a-zA-Z_-]{2,30}$
 good-names=i,j,k,f,_
+
+[MISCELLANEOUS]
+# List of note tags to take in consideration, separated by a comma.
+notes=TODO

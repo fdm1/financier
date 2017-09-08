@@ -1,3 +1,5 @@
+"""Wrapper to launch the flask app"""
+
 from flask import Flask
 from flask_session import Session
 from flask_app.financier_app import financier_app
