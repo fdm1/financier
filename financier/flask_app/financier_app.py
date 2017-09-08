@@ -1,10 +1,9 @@
 import os
-import datetime
 from financier.budget_simulator import BudgetSimulator
 from flask_app.yaml_loader import no_duplicates_constructor
-from flask import flash, Blueprint, request, make_response, redirect, url_for, render_template, abort
+from flask import (flash, Blueprint, request, make_response,
+                   redirect, render_template)
 from werkzeug.utils import secure_filename
-from jinja2 import TemplateNotFound
 from string import digits
 import yaml
 
@@ -13,7 +12,7 @@ financier_app = Blueprint('financier_app', __name__, template_folder='templates'
 yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
                      no_duplicates_constructor)
 
-# todo
+# TODO
 # - change modes (summary vs pretty)
 # - show costs/inputs in fields
 #     - make updatable
@@ -36,6 +35,7 @@ def float_to_currency(value):
 def start_balance(request):
     return extract_float(request.cookies.get('start_balance'))
 
+
 def build_budget(request):
     current_budget = request.cookies.get('current_budget')
     if current_budget and isinstance(eval(current_budget), dict):
@@ -55,7 +55,7 @@ def show_budget_simulation():
     else:
         budget = []
         notes = ['No Budget Supplied. Please upload one']
-        json_data=""
+        json_data = ""
     return render_template('pages/index.html',
                            budget=[i for i in budget],
                            json_data=json_data,
@@ -105,4 +105,3 @@ def edit_budget():
     simulated_budget = build_budget(request)
     return render_template('pages/edit_budget.html',
                            events=simulated_budget.budget_events)
-

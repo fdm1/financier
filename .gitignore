@@ -7,3 +7,8 @@ static/data
 *.csv
 __pycache__/
 tags
+.tox/
+.coverage
+.cache/
+*.egg-info/
+htmlcov/

@@ -2,7 +2,7 @@ version: '2'
 services:
   master:
     image: python:3.6.2-alpine
-    command: sh -c "cd /financier; pip install -r requirements.txt; python app.py"
+    command: sh -c "cd /financier; pip install -r requirements.txt; python financier/app.py"
     working_dir: /financier
     ports:
       - 5000:5000

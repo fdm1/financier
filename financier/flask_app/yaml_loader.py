@@ -1,5 +1,6 @@
 from yaml.constructor import ConstructorError
-from string import digits
+
+
 def no_duplicates_constructor(loader, node, deep=False):
     """Check for duplicate keys."""
 
@@ -9,7 +10,7 @@ def no_duplicates_constructor(loader, node, deep=False):
         key = loader.construct_object(key_node, deep=deep)
         value = loader.construct_object(value_node, deep=deep)
         if key in mapping:
-            ### Trying to correct and allow duplicates...failed so far
+            # # Trying to correct and allow duplicates...failed so far
             # if key[-1] in digits:
             #     key = key[:-1] + str((int(key[-1]) + 1))
             # else:
@@ -20,4 +21,3 @@ def no_duplicates_constructor(loader, node, deep=False):
         raise ConstructorError("while constructing a mapping", node.start_mark,
                                "found duplicate key (%s)" % ','.join(duplicates))
     return loader.construct_mapping(node, deep)
-

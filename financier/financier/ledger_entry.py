@@ -1,6 +1,10 @@
 class LedgerEntry(object):
-    def __init__(self, event, debit_amount=None, credit_amount=None, thedate=None, balance=None, min_balance = None, max_balance = None, sep = ','):
+    def __init__(self, event, debit_amount=None, credit_amount=None,
+                 thedate=None, balance=None, min_balance=None,
+                 max_balance=None, sep=','):
+
         self.thedate = thedate
+
         if isinstance(event, str):
             self.debit_amount = debit_amount
             self.credit_amount = credit_amount
@@ -21,7 +25,7 @@ class LedgerEntry(object):
 
         res = amount if amount != 0 else None
         try:
-            return ("$%.2f" % round(res, 2)).replace('-','')
+            return ("$%.2f" % round(res, 2)).replace('-', '')
         except:
             return ''
 
@@ -47,27 +51,23 @@ class LedgerEntry(object):
 
     def __iter__(self):
         for i in [str(self.thedate),
-               str(self.event),
-               self.debit_amount_currency,
-               self.credit_amount_currency,
-               self.balance_currency,
-               self.min_balance_currency,
-               self.max_balance_currency ]:
+                  str(self.event),
+                  self.debit_amount_currency,
+                  self.credit_amount_currency,
+                  self.balance_currency,
+                  self.min_balance_currency,
+                  self.max_balance_currency]:
             yield i
-
 
     @property
     def csv_string(self):
         data = [str(self.thedate).lower(),
-                str(self.balance).lower()
-               ]
+                str(self.balance).lower()]
         return ','.join(data)
 
     @property
     def to_json(self):
         return {'date': str(self.thedate), 'balance': str(self.balance)}
 
-
     def __str__(self):
         return self.sep.join(list(self))
-

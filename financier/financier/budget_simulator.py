@@ -2,7 +2,6 @@ from financier.budget_event import BudgetEvent
 from financier.ledger_entry import LedgerEntry
 from datetime import date, timedelta
 import json
-import yaml
 
 
 class BudgetSimulator(object):
@@ -15,7 +14,6 @@ class BudgetSimulator(object):
         self.end_date = end_date
         self.budget_dict = budget_dict
 
-
     def __repr__(self):
         return "{}(start_date={}, start_balance={}, end_date={})".format(
                 self.__class__.__name__,
@@ -23,14 +21,13 @@ class BudgetSimulator(object):
                 self.start_balance,
                 self.end_date)
 
-
     def build_budget_events(self):
         budget_events = []
         for e in self.budget_dict["budget_events"]:
-            budget_events.append(BudgetEvent(name = e, **self.budget_dict["budget_events"][e]))
+            new_event = BudgetEvent(name=e, **self.budget_dict["budget_events"][e])
+            budget_events.append(new_event)
 
         return budget_events
-
 
     def ordered_events(self):
         """Return non-one-time events in order of date,
@@ -39,16 +36,14 @@ class BudgetSimulator(object):
         Used for `edit_budget` view"""
 
         ordered_events = []
-        today = datetime.today
-        if today.day == 1:
-            start_month = today.month
-        else:
-            start_month = today.month + 1
-
-        start_date = datetime(today.year, start_month, today.day)
-
-        pass
-
+        # today = datetime.today
+        # if today.day == 1:
+        #     start_month = today.month
+        # else:
+        #     start_month = today.month + 1
+        #
+        # start_date = datetime(today.year, start_month, today.day)
+        return ordered_events
 
     def notes(self):
         notes = [
@@ -62,21 +57,19 @@ class BudgetSimulator(object):
 
         return notes
 
-
     @property
     def budget_events(self):
         return self.build_budget_events()
 
-
-    def simulate_budget(self, sep = ','):
+    def simulate_budget(self, sep=','):
         thedate = self.start_date
         balance = self.start_balance
         ledger = [LedgerEntry(thedate=self.start_date,
-                                debit_amount=None,
-                                credit_amount=None,
-                                event="Starting Balance",
-                                balance=self.start_balance, 
-                                sep = sep)]
+                              debit_amount=None,
+                              credit_amount=None,
+                              event="Starting Balance",
+                              balance=self.start_balance,
+                              sep=sep)]
         min_balance = self.start_balance
         total_min_balance = self.start_balance
         max_balance = self.start_balance
@@ -111,35 +104,35 @@ class BudgetSimulator(object):
                 max_balance = balance
             thedate = thedate + timedelta(1)
         event = LedgerEntry(thedate=self.end_date,
-                                    event="Ending Balance", 
-                                    debit_amount=None,
-                                    credit_amount=None,
-                                    balance=balance, 
-                                    min_balance=total_min_balance, 
-                                    max_balance=total_max_balance)
+                            event="Ending Balance",
+                            debit_amount=None,
+                            credit_amount=None,
+                            balance=balance,
+                            min_balance=total_min_balance,
+                            max_balance=total_max_balance)
         ledger.append(event)
         return ledger
 
-
     def budget(self, output=None):
         budget = [LedgerEntry("Date", "Event", "Debit", "Credit",
-                                "Balance", "Min", "Max")]
+                              "Balance", "Min", "Max")]
         for l in self.simulate_budget():
             budget.append(l)
 
         if output == 'simple':
             budget = [i for i in budget if (
-                        not (i.thedate == i.event ==i.balance)
-                        and i.event not in ('Starting Balance',
-                                            'End of Month',
-                                            'Ending Balance'))]
+                          not (i.thedate == i.event == i.balance) and
+                          i.event not in ('Starting Balance',
+                                          'End of Month',
+                                          'Ending Balance')
+                          )
+                      ]
         elif output == 'summary':
             budget = [i for i in budget
-                    if i.event in ('Starting Balance',
-                                    'End of Month',
-                                    'Ending Balance')]
+                      if i.event in ('Starting Balance',
+                                     'End of Month',
+                                     'Ending Balance')]
         return budget
-
 
     def to_json(self):
         return json.dumps([r.to_json for r in self.budget()][1:])
