@@ -1,23 +1,55 @@
-requires Docker installed to work
+[![Build Status](https://travis-ci.org/fdm1/financier.svg?branch=master)](https://travis-ci.org/fdm1/financier)
+
+Financier
+=========
+
+Generate a simulated budget for the next year to make sure you
+don't run out of money.
+
+
+Requirements
+------------
+
+* docker
+* docker-compose (v2)
+
+
+Usage
+-----
+
+1. Spin up the app:
+
+    ```bash
+    docker-compose up
+    ```
+
+1. Go to http://localhost:5000
+
+1. Upload a budget yaml (budget construction in UI is planned)
+
+1. Set your current balance in the UI
+
+
+See it in action!
+-----------------
+
+Using the `sample_budget.yaml` with a starting balance of $100, the app shows this budget:
+
+(The yaml can be found in `docs/resources/sample_budget.yaml`)
+
+![sample_budget](docs/images/sample_budget.png)
+
+
+Budget Configs
+--------------
+
+### Config yaml format:
 
 ```
-bash budgetize.sh <config_file_full_path> \
-    [--start_date -s <start_date> (YYYY-MM-DD) (default today)] \
-    [--end_date -e <end_date> (YYYY-MM-DD) (default 1 year from now)] \
-    [--balance -b <start_balance> (default 0)] \
-    [--filename -f <output_file> (default <config>_YYYYMMDD_HHSS.csv) ] \
-    [--to_csv=True (default False) ]
-    [--output -p <output style> 'summary' == only EOM, 'simple' == no pretty print or summary (default: print pretty format with line breaks)]
+notes:
+  - note 1
+  - note 2
 
-```
-
-If `--no_csv`, it will print the budget to the screen.
-Else, it will create a csv in the same directory as the config.
-
-
-Config yaml format:
-
-```
 budget_events:
   <event_name>:
     amount: <amount>
@@ -55,34 +87,3 @@ If a parameter isn't listed below a `kind`, it has no effect.
     - `day_of_month`: what day of the month to move money (avoid after the 28th as end of month dates not fixed yet)
     - `end_date`: money will not move after this date
 
-
-## Example:
-```
-$ bash budgetize.sh $(pwd)/sample_budget.yaml -b 100 -s 2016-10-01 -e 2016-11-30 --to_csv=False
-
-          Date                 Event   Debit   Credit  Balance     Min      Max
-          0   2016-10-01      Starting Balance                   $100.00
-          1         ----                  ----    ----     ----     ----    ----     ----
-          2   2016-10-01              mortgage           -$2.00   $98.00
-          3   2016-10-14             frank_pay  $10.00           $108.00
-          4   2016-10-15              mortgage           -$2.00  $106.00
-          5   2016-10-20               daycare           -$4.50  $101.50
-          6   2016-10-28             frank_pay  $10.00           $111.50
-          7         ----                  ----    ----     ----     ----    ----     ----
-          8   2016-10-31          End of Month                   $111.50  $98.00  $111.50
-          9
-          10  2016-11-01              mortgage           -$2.00  $109.50
-          11  2016-11-02              vacation          -$24.30   $85.20
-          12  2016-11-11  frank_pay_with_raise  $20.00           $105.20
-          13  2016-11-15              mortgage           -$2.00  $103.20
-          14  2016-11-20               daycare           -$4.50   $98.70
-          15  2016-11-25  frank_pay_with_raise  $20.00           $118.70
-          16        ----                  ----    ----     ----     ----    ----     ----
-          17  2016-11-30          End of Month                   $118.70  $85.20  $118.70
-          18
-          19
-          20        ----                  ----    ----     ----     ----    ----     ----
-          21  2016-11-30        Ending Balance                   $118.70  $85.20  $118.70
-
-
-```

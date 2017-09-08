@@ -1,16 +1,19 @@
+notes:
+  - something noteworthy
+
 budget_events:
   frank_pay: 
     amount: 10
     kind: biweekly
-    example_date: 2016-10-14
-    end_date: 2016-11-01
+    example_date: 2017-10-14
+    end_date: 2017-11-01
   frank_pay_with_raise: 
     amount: 20
     kind: biweekly
-    example_date: 2016-10-14
-    start_date: 2016-11-02
+    example_date: 2017-10-14
+    start_date: 2017-11-02
   daycare: 
-    amount: -4.5
+    amount: -16.5
     kind: monthly
     day_of_month: 20
   mortgage:
@@ -19,8 +22,4 @@ budget_events:
   vacation:
     amount: -24.3
     kind: one_time
-    exact_date: 2016-11-02
-
-
-
-    
+    exact_date: 2017-11-02
