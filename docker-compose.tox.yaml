@@ -4,6 +4,8 @@ services:
     build:
       context: '.'
       dockerfile: Dockerfile.tox
+    environment:
+      - TOXENV
     volumes:
       - ./ci:/financier/ci
       - ./test-requirements.txt:/financier/test-requirements.txt
