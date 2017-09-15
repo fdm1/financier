@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring
-from budget_builder.budget_simulator import BudgetSimulator  # pylint: disable=no-name-in-module
+from budget_builder.budget_simulator import BudgetSimulator
 from flask import escape, session
 from string import digits
 import datetime  # pylint: disable=unused-import
@@ -15,7 +15,7 @@ def extract_float(value):
 
     new_val = str(value or 0)
     try:
-        return float(''.join([d for d in new_val if d in digits or d == '.']))
+        return float(''.join([d for d in new_val if d in digits or d in ['.', '-']]))
     except:
         return 0
 

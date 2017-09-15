@@ -22,7 +22,7 @@ INSTALL_REQUIRES = [
 
 if __name__ == '__main__':
     setup(
-        name='financier-budget-builder',
+        name='budget_builder',
         version=read_version(),
         description='Budget Forecasting Budget Builder',
         author='fdm1',

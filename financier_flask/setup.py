@@ -26,7 +26,7 @@ INSTALL_REQUIRES = [
 
 if __name__ == '__main__':
     setup(
-        name='financier',
+        name='financier_flask',
         version=read_version(),
         description='Budget Forecasting Flask App',
         author='fdm1',
