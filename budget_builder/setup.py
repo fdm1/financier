@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# pylint: disable=missing-docstring,exec-used
 
 from setuptools import setup, find_packages
 import os.path
@@ -8,19 +9,22 @@ def read_version():
     """Read the library version"""
     path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
-        'financier',
+        'budget_builder',
         '_version.py'
     )
     with open(path) as f:
         exec(f.read())
         return locals()['__version__']
 
+INSTALL_REQUIRES = [
+    'PyYAML==3.12',
+]
 
 if __name__ == '__main__':
     setup(
-        name='financier',
+        name='financier-budget-builder',
         version=read_version(),
-        description='Budget Forecasting Flask App',
+        description='Budget Forecasting Budget Builder',
         author='fdm1',
         url='https://github.com/fdm1/financier',
 
@@ -28,5 +32,5 @@ if __name__ == '__main__':
             exclude='tests',
         ),
 
-        install_requires=[],
+        install_requires=INSTALL_REQUIRES,
     )

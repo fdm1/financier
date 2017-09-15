@@ -1,7 +1,7 @@
 <!doctype html>
 <title>Simple Page Blueprint</title>
 <div class="page">
-  <a href={{url_for('financier_app.edit_budget')}}>Edit Budget</a>
+  <a href={{url_for('views.edit_budget')}}>Edit Budget</a>
   <div class="upload_form">
     {% from 'macros/_upload_form.html' import upload_form %}
     {{ upload_form() }}

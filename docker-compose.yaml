@@ -1,11 +1,12 @@
 version: '2'
 services:
-  master:
-    image: python:3.6.2-alpine
-    command: sh -c "cd /financier; pip install -r requirements.txt; python financier/app.py"
-    working_dir: /financier
+  flask_app:
+    build:
+      context: '.'
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
     volumes:
-      - .:/financier
+      - ./budget_builder:/financier/budget_builder
+      - ./financier_flask:/financier/financier_flask
 
