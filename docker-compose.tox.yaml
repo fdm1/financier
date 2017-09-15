@@ -1,0 +1,17 @@
+version: '2'
+services:
+  test_container:
+    build:
+      context: '.'
+      dockerfile: Dockerfile.tox
+    environment:
+      - TOXENV
+    volumes:
+      - ./ci:/financier/ci
+      - ./test-requirements.txt:/financier/test-requirements.txt
+      - ./tox.ini:/financier/tox.ini
+      - ./pylintrc:/financier/pylintrc
+      - ./pytest.ini:/financier/pytest.ini
+      - ./budget_builder:/financier/budget_builder
+      - ./financier_flask:/financier/financier_flask
+

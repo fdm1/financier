@@ -1,14 +1,18 @@
 """Wrapper to launch the flask app"""
 
+import os
+
 from flask import Flask
 from flask_session import Session
-from flask_app.financier_app import financier_app
+from financier_flask import views
 
 app = Flask(__name__)
-app.register_blueprint(financier_app)
 # Blueprint can be registered many times
-app.register_blueprint(financier_app, url_prefix='/pages')
+app.register_blueprint(views.bp)
 
+app.secret_key = os.urandom(24)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = '/tmp/flask_sessions'
 Session(app)
 
 

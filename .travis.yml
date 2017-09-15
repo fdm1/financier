@@ -1,3 +1,8 @@
+sudo: required
+
+services:
+    - docker
+
 language: python
 
 matrix:
@@ -7,11 +12,5 @@ matrix:
     - python: 3.6
       env: TOXENV=lint
 
-install:
-  - pip install tox-travis
-  - pip install .
-  - pip install -r requirements.txt
-  - pip install -r test-requirements.txt
-
 script:
-  - tox
+  - ./ci/run_tests.sh

@@ -1,7 +1,7 @@
 <!doctype html>
 <title>Simple Page Blueprint</title>
 <div class="page">
-  <a href={{url_for('financier_app.show_budget_simulation')}}>View Budget Simulation</a>
+  <a href={{url_for('views.show_budget_simulation')}}>View Budget Simulation</a>
 
   {% from 'macros/edit_budget/_budget_events.html' import budget_events %}
   {{ budget_events(events) }}
