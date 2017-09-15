@@ -18,7 +18,6 @@ yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
 def show_budget_simulation():
     """Home page. Show a budget if there is one"""
     simulated_budget = build_budget()
-    flash('hi')
     if simulated_budget:
         budget = simulated_budget.budget()
         notes = simulated_budget.notes()
@@ -27,7 +26,7 @@ def show_budget_simulation():
         budget = []
         notes = ['No Budget Supplied. Please upload one']
         json_data = ""
-    return render_template('index.html',
+    return render_template('pages/index.html',
                            budget=[i for i in budget],
                            json_data=json_data,
                            notes=notes,
@@ -57,7 +56,7 @@ def upload_file():
             try:
                 budget = str(yaml.load(open(tmp_path, 'r')))
             except:
-                # flash("{} is not valid yaml".format(filename))
+                flash("{} is not valid yaml".format(filename))
                 os.remove(tmp_path)
                 return resp
 
@@ -69,7 +68,12 @@ def upload_file():
 @bp.route('/set_start_balance', methods=['POST'])
 def set_start_balance():
     """Update the 'start_balance' cookie"""
-    session['start_balance'] = request.values['start_balance'] or 0
+    if 'start_balance' in session and not request.values['start_balance']:
+        balance = session['start_balance']
+    else:
+        balance = request.values['start_balance'] or 0
+    session['start_balance'] = balance
+    flash("Starting balance set to {}".format(float_to_currency(balance)))
     return redirect('/')
 
 
