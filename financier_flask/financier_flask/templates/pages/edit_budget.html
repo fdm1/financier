@@ -1,11 +1,7 @@
-<!doctype html>
-<title>Simple Page Blueprint</title>
+{% from 'macros/edit_budget/_budget_events.html' import budget_events %}
 
-{% include 'style/_css_js.html' %}
-
-<div class="page">
+{% extends "layout.html" %}
+{% block body %}
   <a href={{url_for('views.show_budget_simulation')}}>View Budget Simulation</a>
-
-  {% from 'macros/edit_budget/_budget_events.html' import budget_events %}
   {{ budget_events(events) }}
-</div>
+{% endblock %}
