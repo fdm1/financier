@@ -1,19 +1,11 @@
-{% from 'macros/index/_set_balance_form.html' import set_balance_form %}
-{% from 'macros/index/_notes.html' import budget_notes %}
-{% from 'macros/index/_budget_graph.html' import budget_graph %}
-{% from 'macros/index/_budget_table.html' import budget_table %}
-
 {% extends "layout.html" %}
+
 {% block body %}
   <a href={{url_for('views.edit_budget')}}>Edit Budget</a>
 
-  {% include 'partials/_upload_form.html' %}
-
-  {{ set_balance_form(start_balance) }}
-
-  {{ budget_notes(notes) }}
-
-  {{ budget_graph(json_data) }}
-
-  {{ budget_table(budget) }}
+  {% include 'partials/forms/_upload_form.html' %}
+  {% include 'partials/forms/_set_balance_form.html' %}
+  {% include 'partials/_notes.html' %}
+  {% include 'partials/_budget_graph.html' %}
+  {% include 'partials/_budget_table.html' %}
 {% endblock %}

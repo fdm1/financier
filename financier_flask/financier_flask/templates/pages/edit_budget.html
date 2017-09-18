@@ -1,7 +1,5 @@
-{% from 'macros/edit_budget/_budget_events.html' import budget_events %}
-
 {% extends "layout.html" %}
 {% block body %}
-  <a href={{url_for('views.show_budget_simulation')}}>View Budget Simulation</a>
-  {{ budget_events(events) }}
+  <a href={{url_for('views.show_budget_simulation')}}>Home</a>
+  {% include 'partials/_budget_events.html' %}
 {% endblock %}
