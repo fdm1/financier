@@ -13,4 +13,4 @@ matrix:
       env: TOXENV=lint
 
 script:
-  - ./ci/run_tests.sh
+  - ./ci/run_tests.sh ${TOXENV}
