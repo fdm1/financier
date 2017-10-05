@@ -3,6 +3,7 @@ from budget_builder.budget_simulator import BudgetSimulator
 from flask import escape, session
 from string import digits
 import datetime  # pylint: disable=unused-import
+import yaml
 
 # silence pyflakes -
 # https://stackoverflow.com/questions/5033727/how-do-i-get-pyflakes-to-ignore-a-statement/12121404#12121404
@@ -29,6 +30,15 @@ def start_balance():
     """Get the starting balance from the session"""
     balance = escape(session['start_balance']) if 'start_balance' in session else 0
     return extract_float(balance)
+#
+#
+# def current_budget():
+#     """Set the 'current_budget' session config to the BudgetSimulator"""
+#     # pylint: disable=eval-used
+#     # TODO: figure out a better solution than eval
+#     if 'current_budget' in session:
+#         current_budget = session['current_budget']
+#         return current_budget
 
 
 def build_budget():
@@ -36,7 +46,7 @@ def build_budget():
     # pylint: disable=eval-used
     # TODO: figure out a better solution than eval
     if 'current_budget' in session:
-        current_budget = session['current_budget']
+        current_budget = yaml.load(session['current_budget'])
 
-        return BudgetSimulator(eval(current_budget),
+        return BudgetSimulator(current_budget,
                                start_balance=start_balance())

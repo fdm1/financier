@@ -1,11 +1,17 @@
 """Object to represent budget events"""
-from datetime import date
+from datetime import date, datetime
 
 
 class UnsupportedEventType(Exception):
     """Error for when unknown event types are given"""
     pass
 
+
+def getdate(val):
+    if isinstance(val, (date, datetime)):
+        return val
+    else:
+        return datetime.strptime(val, '%Y-%m-%d')
 
 class BudgetEvent(object):
     """
@@ -32,10 +38,10 @@ class BudgetEvent(object):
             self.credit_amount = amount
         self.kind = kind
         self.day_of_month = day_of_month
-        self.start_date = start_date
-        self.example_date = example_date
-        self.exact_date = exact_date
-        self.end_date = end_date
+        self.start_date = getdate(start_date)
+        self.example_date = getdate(example_date)
+        self.exact_date = getdate(exact_date)
+        self.end_date = getdate(end_date)
 
     @property
     def debit(self):

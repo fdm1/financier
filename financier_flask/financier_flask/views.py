@@ -7,11 +7,13 @@ from financier_flask.utils.view_helpers import (
 from flask import (flash, Blueprint, request, make_response,
                    session, redirect, render_template)
 from werkzeug.utils import secure_filename
+import json
 import yaml
 
 bp = Blueprint('views', __name__, template_folder='templates')
 yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
                      no_duplicates_constructor)
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.date) else None)
 
 
 @bp.route('/')
@@ -28,6 +30,7 @@ def show_budget_simulation():
         json_data = ""
     return render_template('pages/index.html',
                            budget=[i for i in budget],
+                           # current_budget=current_budget(),
                            json_data=json_data,
                            notes=notes,
                            start_balance=float_to_currency(start_balance()))
@@ -54,7 +57,7 @@ def upload_file():
             tmp_path = os.path.join('/tmp', filename)
             file.save(tmp_path)
             try:
-                budget = str(yaml.load(open(tmp_path, 'r')))
+                budget = json.dumps(yaml.load(open(tmp_path, 'r')))
             except:
                 flash("{} is not valid yaml".format(filename))
                 os.remove(tmp_path)
@@ -83,3 +86,10 @@ def edit_budget():
     simulated_budget = build_budget()
     return render_template('pages/edit_budget.html',
                            events=simulated_budget.budget_events)
+#
+#
+# @bp.route('/update_budget', methods=['POST'])
+# def update_budget():
+#     """Submit update for budget"""
+#     if request.method == 'POST':
+#

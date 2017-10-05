@@ -2,6 +2,7 @@
 
 {% block body %}
   <a href={{url_for('views.edit_budget')}}>Edit Budget</a>
+  {{ current_budget }}
 
   {% include 'partials/forms/_upload_form.html' %}
   {% include 'partials/forms/_set_balance_form.html' %}
