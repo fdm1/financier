@@ -13,5 +13,6 @@ services:
       - ./pylintrc:/financier/pylintrc
       - ./pytest.ini:/financier/pytest.ini
       - ./budget_builder:/financier/budget_builder
+      - ./budgie:/financier/budgie
       - ./financier_flask:/financier/financier_flask
 

@@ -9,7 +9,7 @@ def read_version():
     """Read the library version"""
     path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
-        'budget_builder',
+        'budgie',
         '_version.py'
     )
     with open(path) as f:
@@ -17,14 +17,14 @@ def read_version():
         return locals()['__version__']
 
 INSTALL_REQUIRES = [
-    'PyYAML',
+    'scipy==1.3.0',
 ]
 
 if __name__ == '__main__':
     setup(
-        name='budget_builder',
+        name='budgie',
         version=read_version(),
-        description='Budget Forecasting Budget Builder',
+        description='Budget Forecasting Budget Builder, now with probabilities',
         author='fdm1',
         url='https://github.com/fdm1/financier',
 

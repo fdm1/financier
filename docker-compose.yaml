@@ -8,5 +8,6 @@ services:
       - 5000:5000
     volumes:
       - ./budget_builder:/financier/budget_builder
+      - ./budgie:/financier/budgie
       - ./financier_flask:/financier/financier_flask
 
