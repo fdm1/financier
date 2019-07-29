@@ -15,10 +15,11 @@ DEFAULT_SAMPLES = 100
 
 class BudgetEvent:
 
-    def __init__(self, amount, frequency_type, start_date=None,
+    def __init__(self, name, amount, frequency_type, start_date=None,
                  end_date=None, credit=True, stdev=0, skew=0,
                  run_days=DAYS_PER_YEAR, samples=DEFAULT_SAMPLES):
 
+        self.name = name
         self._set_amount(amount, credit)
         self.run_days = run_days
         self._set_event_dates(frequency_type, start_date, end_date)

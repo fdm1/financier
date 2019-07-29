@@ -92,4 +92,3 @@ class BiMonthly(Frequency):
                 days.append(date.date())
 
         return days
-

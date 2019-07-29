@@ -1,14 +1,7 @@
 from budgie.frequency import FREQUENCY_TYPES
 
 from datetime import date
-from freezegun import freeze_time
 import pytest
-
-
-@pytest.fixture(autouse=True)
-def set_date():
-    with freeze_time("2019-01-01"):
-        yield
 
 
 class TestOneTime:
