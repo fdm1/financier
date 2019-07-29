@@ -1,6 +1,8 @@
 FROM python:3.7.4-stretch
 
 WORKDIR /financier
+COPY ./test-requirements.txt ./test-requirements.txt
+RUN pip install -r test-requirements.txt
 
 COPY ./budgie/requirements.txt ./budgie/requirements.txt
 COPY ./budget_builder/requirements.txt ./budget_builder/requirements.txt
@@ -14,4 +16,5 @@ RUN pip install -e budget_builder
 RUN pip install -e budgie
 RUN pip install -e financier_flask
 
-CMD ["python", "financier_flask/financier_flask/app.py"]
+
+CMD ["pytest"]

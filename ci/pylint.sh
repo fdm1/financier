@@ -1,11 +1,11 @@
 #! /bin/sh
 
-set -eu -o pipefail
+set -eu pipefail
 
 cd $(dirname $0)/..
 BASE_DIR=$(pwd)
 
-LIBS="budget_builder financier_flask"
+LIBS="budgie budget_builder financier_flask"
 FAILURE=0
 
 for LIB in ${LIBS}; do

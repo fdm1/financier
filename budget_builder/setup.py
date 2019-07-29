@@ -16,9 +16,15 @@ def read_version():
         exec(f.read())
         return locals()['__version__']
 
-INSTALL_REQUIRES = [
-    'PyYAML',
-]
+
+def get_requirements():
+    path = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'requirements.txt',
+    )
+    with open(path) as f:
+        return f.readlines()
+
 
 if __name__ == '__main__':
     setup(
@@ -32,5 +38,5 @@ if __name__ == '__main__':
             exclude='tests',
         ),
 
-        install_requires=INSTALL_REQUIRES,
+        install_requires=get_requirements(),
     )
