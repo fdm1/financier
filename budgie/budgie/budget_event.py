@@ -16,25 +16,38 @@ class BudgetEvent:
 
     def __init__(self, amount, frequency_type, start_date=None,
                  end_date=None, credit=True, stdev=0, skew=0, run_days=DAYS_PER_YEAR, samples=DEFAULT_SAMPLES):
-        if credit:
-            self.amount = amount * -1
-        else:
-            self.amount = amount
 
-        freq = FREQUENCY_TYPES[frequency_type](start_date, end_date)
-        self.event_dates = freq.generate_event_dates()
+        self._set_amount(amount, credit)
+        self.run_days = run_days
+        self._set_event_dates(frequency_type, start_date, end_date)
         self.stdev = stdev
         self.skew = skew
-        self.run_days = run_days
-        if self.stdev:
-            self.samples = samples
-        else:
-            self.samples = 1
+        self._set_sample_size(samples)
 
         self.data = None
         self.summary = None
         self.generate_data()
         self.generate_summary_data()
+
+    def _set_amount(self, amount, credit):
+        if credit:
+            self.amount = amount * -1
+        else:
+            self.amount = amount
+
+    def _set_event_dates(self, frequency_type, start_date, end_date):
+        if frequency_type not in FREQUENCY_TYPES:
+            known_types = ', '.join(FREQUENCY_TYPES.keys())
+            raise ValueError(f'"{frequency_type}" is not a known frequency type: ({known_types})')
+
+        freq = FREQUENCY_TYPES[frequency_type](start_date, end_date)
+        self.event_dates = freq.generate_event_dates()
+
+    def _set_sample_size(self, samples):
+        if self.stdev:
+            self.samples = samples
+        else:
+            self.samples = 1
 
     def generate_event_amount(self):
         return skewnorm.rvs(self.skew, loc=self.amount, scale=self.stdev)
