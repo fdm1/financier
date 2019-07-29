@@ -52,3 +52,44 @@ class BiWeekly(Frequency):
                 days.append(date.date())
 
         return days
+
+
+@frequency
+class Monthly(Frequency):
+
+    def generate_event_dates(self):
+        days = []
+        today = datetime.today()
+        day_of_month = self.start_date.day
+        if day_of_month > 28:
+            raise ValueError(f'Day of month for ({day_of_month} cannot be after the 28th.')
+        for i in range(365):
+            date = today + timedelta(days=i)
+            if (date.day == day_of_month and
+                    date >= self.start_date and
+                    date <= self.end_date):
+
+                days.append(date.date())
+
+        return days
+
+
+@frequency
+class BiMonthly(Frequency):
+
+    def generate_event_dates(self):
+        days = []
+        today = datetime.today()
+        day_of_month = self.start_date.day
+        if day_of_month > 28:
+            raise ValueError(f'Day of month for ({day_of_month} cannot be after the 28th.')
+        for i in range(365):
+            date = today + timedelta(days=i)
+            if (date.day == day_of_month and
+                    date >= self.start_date and
+                    date <= self.end_date):
+
+                days.append(date.date())
+
+        return days
+
