@@ -1,4 +1,5 @@
 freezegun==0.3.12
+ipython
 pylint
 pytest>=2.6.4
 pytest-cov>=1.8.1
