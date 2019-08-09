@@ -9,13 +9,15 @@ from statistics import mean
 Event = namedtuple('Event', 'event_date event_amounts')
 EventSummary = namedtuple('EventSummary', 'event_date min mean max')
 
-DAYS_PER_YEAR=365
-DEFAULT_SAMPLES=100
+DAYS_PER_YEAR = 365
+DEFAULT_SAMPLES = 100
+
 
 class BudgetEvent:
 
     def __init__(self, amount, frequency_type, start_date=None,
-                 end_date=None, credit=True, stdev=0, skew=0, run_days=DAYS_PER_YEAR, samples=DEFAULT_SAMPLES):
+                 end_date=None, credit=True, stdev=0, skew=0,
+                 run_days=DAYS_PER_YEAR, samples=DEFAULT_SAMPLES):
 
         self._set_amount(amount, credit)
         self.run_days = run_days
@@ -65,12 +67,18 @@ class BudgetEvent:
     def generate_event_data(self):
         return [self.generate_event_amount() for i in range(self.samples)]
 
-
     def generate_summary_data(self):
         if not self.summary:
             summary = []
             for event in self.data:
                 # TODO: maybe flip min/max if credit?
-                summary.append(EventSummary(event.event_date, min(event.event_amounts), mean(event.event_amounts), max(event.event_amounts)))
+                summary.append(
+                    EventSummary(
+                        event.event_date,
+                        min(event.event_amounts),
+                        mean(event.event_amounts),
+                        max(event.event_amounts)
+                    )
+                )
 
         self.summary = summary
