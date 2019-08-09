@@ -2,7 +2,7 @@ build_test:
 	docker build -t financier_test -f Dockerfile.test .
 
 test: build_test
-	docker run --rm financier_test
+	docker run -it --rm financier_test
 
 pylint: build_test
 	docker run --rm financier_test ./ci/pylint.sh
