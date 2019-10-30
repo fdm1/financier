@@ -17,7 +17,7 @@ def read_version():
         return locals()['__version__']
 
 INSTALL_REQUIRES = [
-    'Flask==0.11.1',
+    'Flask==1.0',
     'Flask-Menu',
     'Flask-Session',
     'PyYAML==3.12',
