@@ -17,7 +17,7 @@ def read_version():
         return locals()['__version__']
 
 INSTALL_REQUIRES = [
-    'PyYAML==3.12',
+    'PyYAML==5.4',
 ]
 
 if __name__ == '__main__':
