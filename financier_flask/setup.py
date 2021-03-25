@@ -20,7 +20,7 @@ INSTALL_REQUIRES = [
     'Flask==0.11.1',
     'Flask-Menu',
     'Flask-Session',
-    'PyYAML==3.12',
+    'PyYAML==5.4',
 ]
 
 
